@@ -1,0 +1,8 @@
+#!/usr/bin/python3
+import sys, os
+if len(sys.argv) < 2:
+	print("Usage : bpstart <backup number>")
+	exit()
+bpnb = sys.argv[1]
+os.chdir(f"/home/minecraft/bps/bp{bpnb}")
+os.system("./start.sh")

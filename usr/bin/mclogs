@@ -1,0 +1,77 @@
+#!/usr/bin/python3
+import sys,os,re,time
+from colorama import Fore, Style
+os.chdir("/home/minecraft/server/logs")
+
+if len(sys.argv) > 3:
+	sys.argv[2] = r"\\s".join(sys.argv[2:])
+
+def getLogs(d,m=None,y=None):
+	if m == None:
+		m = time.strftime("%m")
+		if int(d) > int(time.strftime("%d")):
+			m = int(m)-1
+			if m==0:
+				m = "12"
+	if y == None:
+		y = time.strftime("%Y")
+		if int(m) > int(time.strftime("%m")):
+			y = int(y)-1
+	for f in sorted([x for x in os.listdir() if re.match(r"{}-0?{}-0?{}-[0-9]+.log.gz".format(y,m,d),x)]):
+		os.system("gunzip {}".format(f))
+		print(Fore.GREEN + "\n\n--------BEGIN {}---------".format(f[:-3]) + Style.RESET_ALL)
+		if len(sys.argv) > 2:
+			os.system("cat {} | grep -i --color=always {}".format(f[:-3],sys.argv[2]))
+		else:
+			os.system("cat {}".format(f[:-3]))
+		print(Fore.GREEN + "--------END {}---------".format(f[:-3]) + Style.RESET_ALL)
+		os.system("gzip {}".format(f[:-3]))
+	if (int(d),int(m),int(y)) == (int(time.strftime("%d")),int(time.strftime("%m")),int(time.strftime("%Y"))):
+		if len(sys.argv) > 2:
+			getLatest(sys.argv[2])
+		else:
+			getLatest()
+def parcourir(srch=None):
+	for f in sorted([n for n in os.listdir() if n[-3:] == ".gz"]):
+		os.system("gunzip {}".format(f))
+		f = f[:-3]
+		print(Fore.GREEN + "\n\n--------BEGIN {}---------".format(f) + Style.RESET_ALL)
+		if srch != None:
+	        	os.system("cat {} | grep -i --color=always {}".format(f,srch))
+		else:
+			os.system("cat {}".format(f))
+		print(Fore.GREEN + "--------END {}---------".format(f) + Style.RESET_ALL)
+		os.system("gzip {}".format(f))
+	getLatest(srch)
+def getLatest(srch=None):
+	print(Fore.GREEN + "\n\n--------BEGIN latest.log---------" + Style.RESET_ALL)
+	if srch == None:
+		os.system("cat latest.log")
+	else:
+		os.system(f"cat latest.log | grep -i --color=always {srch}")
+	print(Fore.GREEN + "--------END latest.log---------" + Style.RESET_ALL)
+if len(sys.argv) <= 1:
+	getLatest()
+elif re.match(r"^[0-9]{1,2}$",sys.argv[1]):
+	getLogs(sys.argv[1])
+
+elif re.match(r"^[0-9]{1,2}-[0-9]{1,2}$",sys.argv[1]):
+	args = sys.argv[1].split("-")
+	getLogs(args[0],args[1])
+elif re.match(r"^[0-9]{1,2}-[0-9]{1,2}-[0-9]{4}$",sys.argv[1]):
+	args = sys.argv[1].split("-")
+	getLogs(args[0],args[1],args[2])
+elif sys.argv[1]=="all":
+	if len(sys.argv) > 2:
+		parcourir(sys.argv[2])
+	else:
+		parcourir()
+elif sys.argv[1]=="today":
+	getLogs(time.strftime("%d"),time.strftime("%m"),time.strftime("%Y"))
+elif sys.argv[1] in ["yest","yesterday"]:
+	yestdate = time.localtime(time.time()-86400)
+	getLogs(time.strftime("%d",yestdate),time.strftime("%m",yestdate),time.strftime("%Y",yestdate))
+else:
+	if len(sys.argv) > 2:
+		sys.argv[1] = sys.argv[1] + r"\\s" + sys.argv[2]
+	getLatest(sys.argv[1])

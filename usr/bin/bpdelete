@@ -1,0 +1,7 @@
+#!/usr/bin/python3
+import sys
+if len(sys.argv) < 2:
+	print("Usage : bpdelete <backup id>")
+	exit()
+import os
+os.system(f"rm -rf /home/minecraft/server/bps/bp{sys.argv[1]}")

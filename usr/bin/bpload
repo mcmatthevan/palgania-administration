@@ -1,0 +1,50 @@
+#!/usr/bin/python3
+import sys, os, re
+if len(sys.argv) < 2:
+	print("Usage : bpload <commit id>")
+	exit(1)
+if len(sys.argv) > 2:
+	port = int(sys.argv[2])
+else:
+	port = 6666
+cmid = str(sys.argv[1]).replace("\x96","")
+os.chdir("/home/minecraft/bps")
+nextnb = len([x for x in os.listdir() if "bp" in x])
+os.system(f"wget https://github.com/mcmatthevan/palgania_save/archive/{cmid}.zip")
+os.system(f"unzip {cmid}.zip")
+os.chdir(f"palgania_save-{cmid}/github_saves/")
+os.system("cat server_sav_a* > server_sav")
+os.system("tar xzfv server_sav")
+
+os.system(f"mv ./home/minecraft/server ../../bp{nextnb}")
+os.chdir("../../")
+os.system(f"rm -rf palgania_save-{cmid} {cmid}.zip")
+
+#change le port du serveur restauré
+os.chdir(f"bp{nextnb}")
+with open("server.properties","r") as fichier:
+	cont = fichier.read()
+cont = re.sub(r"\nserver-port\s*=\s*[0-9]+\n",f"\nserver-port={port}\n",cont)
+with open("server.properties","w") as fichier:
+	fichier.write(cont)
+with open("stscript.py","r") as fichier:
+	cont = fichier.read()
+cont = cont.replace("screen -d -m -S \\\"mc\\\"",f"screen -d -m -S \\\"bp{nextnb}\\\"")\
+.replace("and \".mc\" not",f"and \".bp{nextnb}\" not")\
+.replace("if \".mc\" in",f"if \".bp{nextnb}\" in ")
+
+with open("bstscript.py","w") as fichier:
+	fichier.write(cont)
+os.system("mv start.sh ancstart.sh")
+with open("start.sh","w") as fichier:
+	fichier.write(f"python3 /home/minecraft/bps/bp{nextnb}/bstscript.py")
+os.system("chmod +x start.sh")
+os.chdir("plugins/WorldEdit")
+with open("config.yml","r") as fichier:
+	cont = fichier.read()
+cont = cont.replace("allow-symbolic-links: false","allow-symbolic-links: true")
+with open("config.yml","w") as fichier:
+	fichier.write(cont)
+os.system("mv schematics ancschem")
+os.system("ln -s /home/minecraft/server/plugins/WorldEdit/schematics ./")
+

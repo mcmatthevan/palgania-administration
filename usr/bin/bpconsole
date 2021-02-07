@@ -1,0 +1,6 @@
+#!/usr/bin/python3
+import sys,os
+if len(sys.argv) < 2:
+	print("Usage : bpconsole <backup id>")
+	exit()
+os.system(f"screen -x \"bp{sys.argv[1]}\"")

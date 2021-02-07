@@ -1,2 +1,3 @@
-# palgania-administration
-Scripts used for Palgania Minecraft Server administration
+# Administration de Palgania
+Scripts utilisés pour l'administration du serveur minecraft Palgania.
+

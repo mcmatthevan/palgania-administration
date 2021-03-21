@@ -7,13 +7,17 @@ if len(sys.argv) > 2:
 	port = int(sys.argv[2])
 else:
 	port = 6666
+with open("/home/minecraft/server/password.txt","r") as fichier:
+	password = fichier.read()
 cmid = str(sys.argv[1]).replace("\x96","")
 os.chdir("/home/minecraft/bps")
 nextnb = len([x for x in os.listdir() if "bp" in x])
 os.system(f"wget https://github.com/mcmatthevan/palgania_save/archive/{cmid}.zip")
 os.system(f"unzip {cmid}.zip")
 os.chdir(f"palgania_save-{cmid}/github_saves/")
-os.system("cat server_sav_a* > server_sav")
+os.system("cat server_sav_* > server_sav")
+os.system("openssl enc -d -aes-256-cbc -in server_sav -out server_sav.dnc -pass pass:{}".format(password))
+os.system("mv server_sav.dnc server_sav")
 os.system("tar xzfv server_sav")
 
 os.system(f"mv ./home/minecraft/server ../../bp{nextnb}")

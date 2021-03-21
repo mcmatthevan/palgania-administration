@@ -3,6 +3,8 @@ cd /home/minecraft/palgania_save
 #cp server_sav b
 #git pull
 tar czfv /home/minecraft/palgania_save/server_sav /home/minecraft/server
+python3 encrypt.py
+mv server_sav.enc server_sav
 git rm -r --cached github_saves
 git commit -am "clear files commit"
 git push

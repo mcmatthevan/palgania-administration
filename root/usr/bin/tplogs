@@ -1,11 +1,12 @@
 #!/usr/bin/python3
 import sys,os,re,time
 from colorama import Fore, Style
-os.chdir("/home/minecraft/testpl/logs")
+os.chdir("/home/testpl/server/logs")
+os.system("gzip 20*.log")
 
-if len(sys.argv) > 3:
-	sys.argv[2] = r"\\s".join(sys.argv[2:])
-
+for i,s in enumerate(sys.argv[1:]):
+	sys.argv[i+1] = s.replace(":::","|").replace("%[","\x86obracket\x86").replace("[","\\[").replace("\x86obracket\x86","[")\
+.replace("]%","\x86cbracket\x86").replace("]","\\]").replace("\x86cbracket\x86","]")
 def getLogs(d,m=None,y=None):
 	if m == None:
 		m = time.strftime("%m")
@@ -21,7 +22,7 @@ def getLogs(d,m=None,y=None):
 		os.system("gunzip {}".format(f))
 		print(Fore.GREEN + "\n\n--------BEGIN {}---------".format(f[:-3]) + Style.RESET_ALL)
 		if len(sys.argv) > 2:
-			os.system("cat {} | grep -ai --color=always {}".format(f[:-3],sys.argv[2]))
+			os.system("cat {} | grep -ai -E --color=always '{}'".format(f[:-3],sys.argv[2]))
 		else:
 			os.system("cat {}".format(f[:-3]))
 		print(Fore.GREEN + "--------END {}---------".format(f[:-3]) + Style.RESET_ALL)
@@ -37,7 +38,7 @@ def parcourir(srch=None):
 		f = f[:-3]
 		print(Fore.GREEN + "\n\n--------BEGIN {}---------".format(f) + Style.RESET_ALL)
 		if srch != None:
-	        	os.system("cat {} | grep -ai --color=always {}".format(f,srch))
+	        	os.system("cat {} | grep -ai -E --color=always '{}'".format(f,srch))
 		else:
 			os.system("cat {}".format(f))
 		print(Fore.GREEN + "--------END {}---------".format(f) + Style.RESET_ALL)
@@ -48,7 +49,7 @@ def getLatest(srch=None):
 	if srch == None:
 		os.system("cat latest.log")
 	else:
-		os.system(f"cat latest.log | grep -ai --color=always {srch}")
+		os.system("cat latest.log | grep -ai -E --color=always '{}'".format(srch))
 	print(Fore.GREEN + "--------END latest.log---------" + Style.RESET_ALL)
 if len(sys.argv) <= 1:
 	getLatest()

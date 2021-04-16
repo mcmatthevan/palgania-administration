@@ -1,5 +1,9 @@
 #!/usr/bin/python3
 import sys, os, re
+noencrypt = False
+if "NOENCRYPT" in sys.argv:
+	noencrypt = True
+	del sys.argv[sys.argv.index("NOENCRYPT")]
 if len(sys.argv) < 2:
 	print("Usage : bpload <commit id>")
 	exit(1)
@@ -16,7 +20,8 @@ os.system(f"wget https://github.com/mcmatthevan/palgania_save/archive/{cmid}.zip
 os.system(f"unzip {cmid}.zip")
 os.chdir(f"palgania_save-{cmid}/github_saves/")
 os.system("cat server_sav_* > server_sav")
-os.system("openssl enc -d -aes-256-cbc -in server_sav -out server_sav.dnc -pass pass:{}".format(password))
+if not noencrypt:
+	os.system("openssl enc -d -aes-256-cbc -in server_sav -out server_sav.dnc -pass pass:{}".format(password))
 os.system("mv server_sav.dnc server_sav")
 os.system("tar xzfv server_sav")
 

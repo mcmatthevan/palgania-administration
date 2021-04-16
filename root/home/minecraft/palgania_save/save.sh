@@ -23,6 +23,7 @@ git clone git@palgit:mcmatthevan/palgania_save.git --depth 2
 mv ancsav/last_save palgania_save/
 mv ancsav/push_oby.py palgania_save/
 mv ancsav/server_sav palgania_save/
+mv ancsav/encrypt.py palgania_save/
 cp ancsav/save.sh palgania_save/
 #git commit -am "$NOW"
 #git push

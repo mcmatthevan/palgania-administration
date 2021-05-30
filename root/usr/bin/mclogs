@@ -3,7 +3,11 @@ import sys,os,re,time
 from colorama import Fore, Style
 os.chdir("/home/minecraft/server/logs")
 os.system("gzip 20*.log")
-
+if "NFI" in sys.argv:
+	NFI = True
+	sys.argv.remove("NFI")
+else:
+	NFI = False
 for i,s in enumerate(sys.argv[1:]):
 	sys.argv[i+1] = s.replace(":::","|").replace("%[","\x86obracket\x86").replace("[","\\[").replace("\x86obracket\x86","[")\
 .replace("]%","\x86cbracket\x86").replace("]","\\]").replace("\x86cbracket\x86","]")
@@ -20,12 +24,14 @@ def getLogs(d,m=None,y=None):
 			y = int(y)-1
 	for f in sorted([x for x in os.listdir() if re.match(r"{}-0?{}-0?{}-[0-9]+.log.gz".format(y,m,d),x)]):
 		os.system("gunzip {}".format(f))
-		print(Fore.GREEN + "\n\n--------BEGIN {}---------".format(f[:-3]) + Style.RESET_ALL)
+		if not NFI:
+			print(Fore.GREEN + "\n\n--------BEGIN {}---------".format(f[:-3]) + Style.RESET_ALL)
 		if len(sys.argv) > 2:
 			os.system("cat {} | grep -ai -E --color=always '{}'".format(f[:-3],sys.argv[2]))
 		else:
 			os.system("cat {}".format(f[:-3]))
-		print(Fore.GREEN + "--------END {}---------".format(f[:-3]) + Style.RESET_ALL)
+		if not NFI:
+			print(Fore.GREEN + "--------END {}---------".format(f[:-3]) + Style.RESET_ALL)
 		os.system("gzip {}".format(f[:-3]))
 	if (int(d),int(m),int(y)) == (int(time.strftime("%d")),int(time.strftime("%m")),int(time.strftime("%Y"))):
 		if len(sys.argv) > 2:
@@ -36,21 +42,25 @@ def parcourir(srch=None):
 	for f in sorted([n for n in os.listdir() if n[-3:] == ".gz"]):
 		os.system("gunzip {}".format(f))
 		f = f[:-3]
-		print(Fore.GREEN + "\n\n--------BEGIN {}---------".format(f) + Style.RESET_ALL)
+		if not NFI:
+			print(Fore.GREEN + "\n\n--------BEGIN {}---------".format(f) + Style.RESET_ALL)
 		if srch != None:
 	        	os.system("cat {} | grep -ai -E --color=always '{}'".format(f,srch))
 		else:
 			os.system("cat {}".format(f))
-		print(Fore.GREEN + "--------END {}---------".format(f) + Style.RESET_ALL)
+		if not NFI:
+			print(Fore.GREEN + "--------END {}---------".format(f) + Style.RESET_ALL)
 		os.system("gzip {}".format(f))
 	getLatest(srch)
 def getLatest(srch=None):
-	print(Fore.GREEN + "\n\n--------BEGIN latest.log---------" + Style.RESET_ALL)
+	if not NFI:
+		print(Fore.GREEN + "\n\n--------BEGIN latest.log---------" + Style.RESET_ALL)
 	if srch == None:
 		os.system("cat latest.log")
 	else:
 		os.system("cat latest.log | grep -ai -E --color=always '{}'".format(srch))
-	print(Fore.GREEN + "--------END latest.log---------" + Style.RESET_ALL)
+	if not NFI:
+		print(Fore.GREEN + "--------END latest.log---------" + Style.RESET_ALL)
 if len(sys.argv) <= 1:
 	getLatest()
 elif re.match(r"^[0-9]{1,2}$",sys.argv[1]):

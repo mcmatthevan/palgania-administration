@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 import sys,os,re,time
 from colorama import Fore, Style
-os.chdir("/home/testpl/server/logs")
+os.chdir("/home/minecraft/testpl/logs")
 os.system("gzip 20*.log")
 
 for i,s in enumerate(sys.argv[1:]):

@@ -5,11 +5,12 @@ cd /home/minecraft/palgania_save
 tar czfv /home/minecraft/palgania_save/server_sav /home/minecraft/server
 python3 encrypt.py
 mv server_sav.enc server_sav
-git rm -r --cached github_saves
-git commit -am "clear files commit"
-git push
-rm github_saves/*
-split -b 90M server_sav github_saves/server_sav_
+#git rm -r --cached github_saves
+#git commit -am "clear files commit"
+#git push
+#rm github_saves/*
+mkdir temp_saves
+split -b 49M server_sav temp_saves/server_sav_
 #git add github_saves
 git config core.filemode false
 ./push_oby.py

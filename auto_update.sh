@@ -17,3 +17,4 @@ cp /home/minecraft/server/stscript.py ./root/home/minecraft/server/stscript.py
 cp /home/minecraft/palgania_save/push_oby.py ./root/home/minecraft/palgania_save/push_oby.py
 cp /home/minecraft/palgania_save/save.sh ./root/home/minecraft/palgania_save/save.sh
 cp /home/minecraft/palgania_save/encrypt.py ./root/home/minecraft/palgania_save/encrypt.py
+cp /home/minecraft/limoncello/modules/interact_server.py ./root/home/minecraft/limoncello/modules/

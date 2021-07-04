@@ -2,8 +2,30 @@ from subprocess import Popen as pop
 from subprocess import PIPE
 import re
 import csv
+import json
 
 PATH = "/home/minecraft/server"
+
+def getInfos(pseudo):
+    dic = {
+        "uuid": getUUID(pseudo)
+    }
+    banned = open("{}/banned-players.json".format(PATH),"r").read()
+    if re.search(r"(?i)\"name\":\s*\"{}\"".format(pseudo),banned):
+        banned = json.loads(banned)
+        for i,pse in enumerate(banned):
+            if pseudo.lower() == pse["name"].lower():
+                break
+        dic["banned"] = {
+            "created": banned[i].get("created"),
+            "expires": banned[i].get("expires"),
+            "reason": banned[i].get("reason"),
+            "source": banned[i].get("source")
+        }
+        del banned
+    else:
+        del banned
+        dic["banned"] = None
 
 def getLogs(day,srch,limit=50):
     if day == "all":

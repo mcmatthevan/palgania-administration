@@ -26,8 +26,9 @@ def getLogs(d,m=None,y=None):
 		os.system("gunzip {}".format(f))
 		if not NFI:
 			print(Fore.GREEN + "\n\n--------BEGIN {}---------".format(f[:-3]) + Style.RESET_ALL)
+			sys.stdout.flush()
 		if len(sys.argv) > 2:
-			os.system("cat {} | grep -ai -E --color=always '{}'".format(f[:-3],sys.argv[2]))
+			os.system("cat {} | grep -ai -E --color=always '{}'".format(f[:-3],"\\s".join(sys.argv[2:])))
 		else:
 			os.system("cat {}".format(f[:-3]))
 		if not NFI:
@@ -35,7 +36,7 @@ def getLogs(d,m=None,y=None):
 		os.system("gzip {}".format(f[:-3]))
 	if (int(d),int(m),int(y)) == (int(time.strftime("%d")),int(time.strftime("%m")),int(time.strftime("%Y"))):
 		if len(sys.argv) > 2:
-			getLatest(sys.argv[2])
+			getLatest("\\s".join(sys.argv[2:]))
 		else:
 			getLatest()
 def parcourir(srch=None):
@@ -44,6 +45,7 @@ def parcourir(srch=None):
 		f = f[:-3]
 		if not NFI:
 			print(Fore.GREEN + "\n\n--------BEGIN {}---------".format(f) + Style.RESET_ALL)
+			sys.stdout.flush()
 		if srch != None:
 	        	os.system("cat {} | grep -ai -E --color=always '{}'".format(f,srch))
 		else:
@@ -74,7 +76,7 @@ elif re.match(r"^[0-9]{1,2}-[0-9]{1,2}-[0-9]{4}$",sys.argv[1]):
 	getLogs(args[0],args[1],args[2])
 elif sys.argv[1]=="all":
 	if len(sys.argv) > 2:
-		parcourir(sys.argv[2])
+		parcourir("\\s".join(sys.argv[2:]))
 	else:
 		parcourir()
 elif sys.argv[1]=="today":
@@ -84,5 +86,5 @@ elif sys.argv[1] in ["yest","yesterday"]:
 	getLogs(time.strftime("%d",yestdate),time.strftime("%m",yestdate),time.strftime("%Y",yestdate))
 else:
 	if len(sys.argv) > 2:
-		sys.argv[1] = sys.argv[1] + r"\\s" + sys.argv[2]
+		sys.argv[1] = "\\s".join(sys.argv[1:])
 	getLatest(sys.argv[1])

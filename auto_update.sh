@@ -18,3 +18,4 @@ cp /home/minecraft/palgania_save/push_oby.py ./root/home/minecraft/palgania_save
 cp /home/minecraft/palgania_save/save.sh ./root/home/minecraft/palgania_save/save.sh
 cp /home/minecraft/palgania_save/encrypt.py ./root/home/minecraft/palgania_save/encrypt.py
 cp /home/minecraft/limoncello/modules/interact_server.py ./root/home/minecraft/limoncello/modules/
+cp /usr/bin/botstart ./root/usr/bin/botstart

@@ -3,7 +3,9 @@ from subprocess import PIPE
 import re
 import csv
 import json
+import os
 
+L_PATH = os.path.abspath(os.path.dirname(__file__) + "/..")
 PATH = "/home/minecraft/server"
 
 def getInfos(pseudo):
@@ -26,6 +28,17 @@ def getInfos(pseudo):
     else:
         del banned
         dic["banned"] = None
+    try:
+        dic["firstjoin"] = json.loads(open("{}/firstjoins.json".format(PATH),"r").read()).get(dic["uuid"])
+    except FileNotFoundError:
+        dic["firstjoin"] = None
+    os.chdir(L_PATH)
+    os.system("mkdir -p userbios")
+    if "{}.json".format(pseudo.lower()) in os.listdir("userbios"):
+        dic["bio"] = json.loads(open("userbios/{}.json".format(pseudo.lower()),"r").read())
+    else:
+        dic["bio"] = None
+    return dic
 
 def getLogs(day,srch,limit=50):
     if day == "all":

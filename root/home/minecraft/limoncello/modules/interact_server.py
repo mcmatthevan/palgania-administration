@@ -4,14 +4,19 @@ import re
 import csv
 import json
 import os
+import requests
 
 L_PATH = os.path.abspath(os.path.dirname(__file__) + "/..")
 PATH = "/home/minecraft/server"
 
 def getInfos(pseudo):
+    uuid = getUUID(pseudo)
     dic = {
-        "uuid": getUUID(pseudo)
+        "uuid": uuid
     }
+    if uuid is None:
+        return dic
+    dic["pseudo"] = requests.get("https://sessionserver.mojang.com/session/minecraft/profile/{}".format(uuid)).json()["name"]
     banned = open("{}/banned-players.json".format(PATH),"r").read()
     if re.search(r"(?i)\"name\":\s*\"{}\"".format(pseudo),banned):
         banned = json.loads(banned)

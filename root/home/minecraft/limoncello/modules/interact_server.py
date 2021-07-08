@@ -12,7 +12,8 @@ PATH = "/home/minecraft/server"
 def getInfos(pseudo):
     uuid = getUUID(pseudo)
     dic = {
-        "uuid": uuid
+        "uuid": uuid,
+        "lastLogout": getLastLogout(uuid)
     }
     if uuid is None:
         return dic
@@ -65,6 +66,12 @@ def getIp(pseudo):
     if uuid is None:
         return "BAD_PSEUDO"
     return pop("grep ipAddress {}/plugins/Essentials/userdata/{}.yml".format(PATH,uuid).split(" "),stdout=PIPE,stderr=PIPE).communicate()[0].decode().replace("ipAddress: ","").replace("\n","")
+
+def getLastLogout(uuid):
+    if "{}.yml".format(uuid) in os.listdir("{}/plugins/Essentials/userdata/".format(PATH)):
+        return int(pop("grep logout: {}/plugins/Essentials/userdata/{}.yml".format(PATH,uuid).split(" "),stdout=PIPE,stderr=PIPE).communicate()[0].decode().replace("logout: ","").replace("\n",""))
+    else:
+        return None
 
 def getUUID(pseudo):
     with open("{}/plugins/Essentials/usermap.csv".format(PATH),"r") as csvfile:

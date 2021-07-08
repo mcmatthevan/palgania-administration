@@ -5,6 +5,7 @@ import csv
 import json
 import os
 import requests
+import time
 
 L_PATH = os.path.abspath(os.path.dirname(__file__) + "/..")
 PATH = "/home/minecraft/server"
@@ -13,7 +14,7 @@ def getInfos(pseudo):
     uuid = getUUID(pseudo)
     dic = {
         "uuid": uuid,
-        "lastLogout": getLastLogout(uuid)
+        "lastLogout": time.strftime("%Y-%m-%d",time.localtime(getLastLogout(uuid)//1000))
     }
     if uuid is None:
         return dic

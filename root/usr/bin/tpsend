@@ -1,0 +1,5 @@
+#!/usr/bin/python3
+import sys
+import os
+toSend = " ".join(sys.argv[1:])
+os.system(f"screen -x tpl -p 0 -X stuff \"{toSend}^M\"")

@@ -3,6 +3,7 @@ cp /usr/bin/mclogs ./root/usr/bin/mclogs
 cp /usr/bin/mcbackup ./root/usr/bin/mcbackup
 cp /usr/bin/mchelp ./root/usr/bin/mchelp
 cp /usr/bin/mcsend ./root/usr/bin/mcsend
+cp /usr/bin/tpsend ./root/usr/bin/tpsend
 cp /usr/bin/mcstart ./root/usr/bin/mcstart
 cp /usr/bin/bpconsole ./root/usr/bin/bpconsole
 cp /usr/bin/bpdelete ./root/usr/bin/bpdelete

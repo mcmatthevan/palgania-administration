@@ -9,6 +9,7 @@ import time
 
 L_PATH = os.path.abspath(os.path.dirname(__file__) + "/..")
 PATH = "/home/minecraft/server"
+PATH2 = "/home/minecraft/testpl"
 
 def getInfos(pseudo):
     uuid = getUUID(pseudo)
@@ -71,6 +72,8 @@ def getIp(pseudo):
 def getLastLogout(uuid):
     if "{}.yml".format(uuid) in os.listdir("{}/plugins/Essentials/userdata/".format(PATH)):
         return int(pop("grep logout: {}/plugins/Essentials/userdata/{}.yml".format(PATH,uuid).split(" "),stdout=PIPE,stderr=PIPE).communicate()[0].decode().replace("logout: ","").replace("\n",""))
+    elif "{}.yml".format(uuid) in os.listdir("{}/plugins/Essentials/userdata/".format(PATH2)):
+        return int(pop("grep logout: {}/plugins/Essentials/userdata/{}.yml".format(PATH2,uuid).split(" "),stdout=PIPE,stderr=PIPE).communicate()[0].decode().replace("logout: ","").replace("\n",""))
     else:
         return None
 

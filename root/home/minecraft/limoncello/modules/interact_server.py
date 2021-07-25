@@ -8,19 +8,18 @@ import requests
 import time
 
 L_PATH = os.path.abspath(os.path.dirname(__file__) + "/..")
-PATH = "/home/minecraft/server"
-PATH2 = "/home/minecraft/testpl"
+PATHS = ("/home/minecraft/server","/home/minecraft/ptdr","/home/minecraft/testpl")
 
 def getInfos(pseudo):
     uuid = getUUID(pseudo)
+    if uuid is None:
+        return {"uuid":None}
     dic = {
         "uuid": uuid,
         "lastLogout": time.strftime("%Y-%m-%d",time.localtime(getLastLogout(uuid)//1000))
     }
-    if uuid is None:
-        return dic
     dic["pseudo"] = requests.get("https://sessionserver.mojang.com/session/minecraft/profile/{}".format(uuid)).json()["name"]
-    banned = open("{}/banned-players.json".format(PATH),"r").read()
+    banned = open("{}/banned-players.json".format(PATHS[0]),"r").read()
     if re.search(r"(?i)\"name\":\s*\"{}\"".format(pseudo),banned):
         banned = json.loads(banned)
         for i,pse in enumerate(banned):
@@ -37,7 +36,7 @@ def getInfos(pseudo):
         del banned
         dic["banned"] = None
     try:
-        dic["firstjoin"] = json.loads(open("{}/firstjoins.json".format(PATH),"r").read()).get(dic["uuid"])
+        dic["firstjoin"] = json.loads(open("{}/firstjoins.json".format(PATHS[0]),"r").read()).get(dic["uuid"])
     except FileNotFoundError:
         dic["firstjoin"] = None
     os.chdir(L_PATH)
@@ -67,19 +66,18 @@ def getIp(pseudo):
     uuid = getUUID(pseudo)
     if uuid is None:
         return "BAD_PSEUDO"
-    return pop("grep ipAddress {}/plugins/Essentials/userdata/{}.yml".format(PATH,uuid).split(" "),stdout=PIPE,stderr=PIPE).communicate()[0].decode().replace("ipAddress: ","").replace("\n","")
+    return pop("grep ipAddress {}/plugins/Essentials/userdata/{}.yml".format(PATHS[0],uuid).split(" "),stdout=PIPE,stderr=PIPE).communicate()[0].decode().replace("ipAddress: ","").replace("\n","")
 
 def getLastLogout(uuid):
-    if "{}.yml".format(uuid) in os.listdir("{}/plugins/Essentials/userdata/".format(PATH)):
-        return int(pop("grep logout: {}/plugins/Essentials/userdata/{}.yml".format(PATH,uuid).split(" "),stdout=PIPE,stderr=PIPE).communicate()[0].decode().replace("logout: ","").replace("\n",""))
-    elif "{}.yml".format(uuid) in os.listdir("{}/plugins/Essentials/userdata/".format(PATH2)):
-        return int(pop("grep logout: {}/plugins/Essentials/userdata/{}.yml".format(PATH2,uuid).split(" "),stdout=PIPE,stderr=PIPE).communicate()[0].decode().replace("logout: ","").replace("\n",""))
-    else:
-        return None
+    for path in PATHS:
+        if "{}.yml".format(uuid) in os.listdir("{}/plugins/Essentials/userdata/".format(path)):
+            return int(pop("grep logout: {}/plugins/Essentials/userdata/{}.yml".format(path,uuid).split(" "),stdout=PIPE,stderr=PIPE).communicate()[0].decode().replace("logout: ","").replace("\n",""))
+    return None
 
 def getUUID(pseudo):
-    with open("{}/plugins/Essentials/usermap.csv".format(PATH),"r") as csvfile:
-        reader = tuple(csv.reader(csvfile,delimiter=",",quotechar="|"))
-    for row in reader:
-        if row[0] == pseudo.lower().replace("*","_"):
-            return row[1]
+    for path in PATHS:
+        with open("{}/plugins/Essentials/usermap.csv".format(path),"r") as csvfile:
+            reader = tuple(csv.reader(csvfile,delimiter=",",quotechar="|"))
+        for row in reader:
+            if row[0] == pseudo.lower().replace("*","_"):
+                return row[1]

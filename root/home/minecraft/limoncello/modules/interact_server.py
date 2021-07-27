@@ -18,7 +18,11 @@ def getInfos(pseudo):
         "uuid": uuid,
         "lastLogout": time.strftime("%Y-%m-%d",time.localtime(getLastLogout(uuid)//1000))
     }
-    dic["pseudo"] = requests.get("https://sessionserver.mojang.com/session/minecraft/profile/{}".format(uuid)).json()["name"]
+    import simplejson
+    try:
+        dic["pseudo"] = requests.get("https://sessionserver.mojang.com/session/minecraft/profile/{}".format(uuid)).json()["name"]
+    except simplejson.errors.JSONDecodeError:
+        dic["pseudo"] = pseudo
     banned = open("{}/banned-players.json".format(PATHS[0]),"r").read()
     if re.search(r"(?i)\"name\":\s*\"{}\"".format(pseudo),banned):
         banned = json.loads(banned)

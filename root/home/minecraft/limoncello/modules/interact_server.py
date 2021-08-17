@@ -8,7 +8,22 @@ import requests
 import time
 
 L_PATH = os.path.abspath(os.path.dirname(__file__) + "/..")
-PATHS = ("/home/minecraft/server","/home/minecraft/ptdr","/home/minecraft/testpl")
+PATHS = ("/home/minecraft/server","/home/minecraft/ptdr","/home/minecraft/atestpl")
+
+def setPerm(player,perm,temp=3600,group="modo"):
+    player = player.lower()
+    try:
+        if group in [parent["group"] for parent in json.loads(open("{}/plugins/LuckPerms/json-storage/users/{}.json".format(PATHS[0],getUUID(player)),"r").read()).get("parents")]:
+            p = pop(["mclogs","NFI"],stdout=PIPE,stderr=PIPE)
+            first = len(p.communicate()[0].decode())
+            os.system("mcsend lp user {} perm settemp {} true {}s".format(player,perm,temp))
+            time.sleep(0.2)
+            p = pop(["mclogs","NFI"],stdout=PIPE,stderr=PIPE)
+            return p.communicate()[0].decode()[first:]
+        else:
+            return "ERR_BAD_GROUP"
+    except FileNotFoundError:
+        return "ERR_BAD_USER"
 
 def getInfos(pseudo):
     uuid = getUUID(pseudo)

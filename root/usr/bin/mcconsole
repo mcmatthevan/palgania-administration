@@ -1,1 +1,8 @@
-screen -x mc
+#!/usr/bin/python3
+
+from mc_module import mcGetLeter
+import os, sys, yaml
+
+leters,serverdir = mcGetLeter(sys.argv)
+
+os.system(f"screen -x {leters}")

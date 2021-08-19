@@ -1,1 +1,1 @@
-screen -x tpl
+mcconsole --tpl

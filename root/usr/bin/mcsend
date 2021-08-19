@@ -1,5 +1,10 @@
 #!/usr/bin/python3
 import sys
 import os
+from mc_module import mcGetLeter
+leters,serverdir = mcGetLeter(sys.argv)
 toSend = " ".join(sys.argv[1:])
-os.system(f"screen -x mc -p 0 -X stuff \"{toSend}^M\"")
+if toSend.strip() == "start":
+	os.system(f"mcstart --{leters}")
+else:
+	os.system(f"screen -x {leters} -p 0 -X stuff \"{toSend}^M\"")

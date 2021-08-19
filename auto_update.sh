@@ -13,6 +13,7 @@ cp /usr/bin/bpstart ./root/usr/bin/bpstart
 cp /usr/bin/tpconsole ./root/usr/bin/tpconsole
 cp /usr/bin/tplogs ./root/usr/bin/tplogs
 cp /usr/bin/tpstart ./root/usr/bin/tpstart
+cp /usr/bin/mc_module.py ./root/usr/bin/
 cp /usr/bin/mcfirstjoins ./root/usr/bin/
 cp /home/minecraft/server/start.sh ./root/home/minecraft/server/start.sh
 cp /home/minecraft/server/stscript.py ./root/home/minecraft/server/stscript.py

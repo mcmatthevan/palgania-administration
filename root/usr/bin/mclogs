@@ -1,7 +1,9 @@
 #!/usr/bin/python3
 import sys,os,re,time
+from mc_module import mcGetLeter
 from colorama import Fore, Style
-os.chdir("/home/minecraft/server/logs")
+leters,serverdir = mcGetLeter(sys.argv)
+os.chdir(f"{serverdir}/logs")
 os.system("gzip 20*.log")
 if "NFI" in sys.argv:
 	NFI = True

@@ -1,2 +1,1 @@
-cd /home/minecraft/testpl/
-./start.sh
+mcstart --tpl

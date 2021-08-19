@@ -1,1 +1,36 @@
-/home/minecraft/server/start.sh
+#!/usr/bin/python3
+
+import os, sys, yaml
+
+
+serverspath = "/home/minecraft/palgservers"
+
+aliases = yaml.safe_load(open(serverspath+"/.alias.yaml","r").read())
+aliasesdirs = [aliases[alias] for alias in aliases]
+
+leters = None
+for arg in sys.argv:
+	if arg[0:2] == "--":
+		leters = arg[2:]
+		if leters in aliases.keys():
+			serverdir = serverspath + "/" + aliases[leters]
+		elif leters in aliasesdirs:
+			leters = aliases.keys()[aliasesdirs.index(leters)]
+			serverdir = serverspath + "/" + aliases[leters]
+		else:
+			serverdir = serverspath + "/" + leters
+
+del aliasesdirs
+
+if leters is None:
+	leters = "mc"
+	serverdir = aliases[leters]
+del aliases
+stinfo = yaml.safe_load(open(serverdir+"/stinfo.yaml","r").read())
+
+os.chdir(serverdir)
+if "."+leters in os.popen("screen -ls").read() and "."+leters not in os.popen("echo $STY").read():
+	print("Server already running.\nType 'mcconsole --"+leters+"' to open the console")
+else:
+	os.system("echo [] > ops.json")
+	os.system("screen -d -m -S \""+leters+"\" "+ stinfo["javapath"] + " -Xmx"+stinfo["ram"][1]+" -Xms"+stinfo["ram"][0]+"  -XX:OnOutOfMemoryError=\""+ " ".join(sys.argv) + " ; kill -9 %p\" -jar {} --nogui -p {}".format(stinfo["version"],stinfo["port"]))

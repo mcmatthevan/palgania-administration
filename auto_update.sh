@@ -16,9 +16,11 @@ cp /usr/bin/tpstart ./root/usr/bin/tpstart
 cp /usr/bin/mc_module.py ./root/usr/bin/
 cp /usr/bin/mcfirstjoins ./root/usr/bin/
 cp /home/minecraft/server/start.sh ./root/home/minecraft/server/start.sh
-cp /home/minecraft/server/stscript.py ./root/home/minecraft/server/stscript.py
-cp /home/minecraft/palgania_save/push_oby.py ./root/home/minecraft/palgania_save/push_oby.py
-cp /home/minecraft/palgania_save/save.sh ./root/home/minecraft/palgania_save/save.sh
-cp /home/minecraft/palgania_save/encrypt.py ./root/home/minecraft/palgania_save/encrypt.py
+cp /home/minecraft/server/stinfo.yaml ./root/home/minecraft/server/stinfo.yaml
+#cp /home/minecraft/palgania_save/push_oby.py ./root/home/minecraft/palgania_save/push_oby.py
+#cp /home/minecraft/palgania_save/save.sh ./root/home/minecraft/palgania_save/save.sh
+#cp /home/minecraft/palgania_save/encrypt.py ./root/home/minecraft/palgania_save/encrypt.py
 cp /home/minecraft/limoncello/modules/interact_server.py ./root/home/minecraft/limoncello/modules/
 cp /usr/bin/botstart ./root/usr/bin/botstart
+cp -r /home/minecraft/ftp ./root/home/minecraft/
+cp /home/minecraft/rshell/commands.py root/home/minecraft/rshell/

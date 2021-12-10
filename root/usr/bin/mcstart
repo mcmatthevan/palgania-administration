@@ -11,5 +11,6 @@ os.chdir(serverdir)
 if "."+leters in os.popen("screen -ls").read() and "."+leters not in os.popen("echo $STY").read():
 	print("Server already running.\nType 'mcconsole --"+leters+"' to open the console")
 else:
+	open("{}/start.sh".format(serverdir),"w").write("mcstart --{}".format(leters))
 	os.system("echo [] > ops.json")
 	os.system("screen -d -m -S \""+leters+"\" "+ stinfo["javapath"] + " -Xmx"+stinfo["ram"][1]+" -Xms"+stinfo["ram"][0]+"  -XX:OnOutOfMemoryError=\""+ " ".join(sys.argv) + " ; kill -9 %p\" -jar {} --nogui -p {}".format(stinfo["version"],stinfo["port"]))

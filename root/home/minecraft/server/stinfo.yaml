@@ -1,6 +1,6 @@
 javapath: /usr/lib/jvm/jdk-17/bin/java
-version: spigot-1.18.jar
+version: paper-1.18.1-165.jar
 ram:
   - 500M
-  - 1024M
-port: 25566
+  - 2176M
+port: 25565

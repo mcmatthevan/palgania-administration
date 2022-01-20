@@ -8,9 +8,19 @@ import requests
 import time
 
 L_PATH = os.path.abspath(os.path.dirname(__file__) + "/..")
-PATHS = ("/home/minecraft/server", "/home/minecraft/ptdr",
+PATHS = ("/home/minecraft/server",
          "/home/minecraft/atestpl")
 rshellpath = "/home/minecraft/rshell/rshell.py"
+
+def suspension(player,temp):
+    player = player.lower()
+    if "admin" in [parent["group"] for parent in json.loads(open("{}/plugins/LuckPerms/json-storage/users/{}.json".format(PATHS[0], getUUID(player)), "r").read()).get("parents")]:
+        os.system("mcsend deop {}".format(player))
+        os.system("mcsend lp user {} perm settemp minecraft.command.op false {}s".format(player,temp))
+        os.system("mcsend gamemode survival {}".format(player))
+        return "L'administrateur {} a été suspendu pour une durée de {} secondes".format(player,temp)
+    else:
+        return "ERR_NOT_ADMIN"
 
 def setPerm(player, perm, temp=3600, group="modo"):
     player = player.lower()

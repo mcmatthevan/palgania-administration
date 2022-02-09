@@ -39,6 +39,13 @@ def setPerm(player, perm, temp=3600, group="modo"):
         return "ERR_BAD_USER"
 
 
+def vote_award(pseudo,votesnb):
+    os.system(f"mcsend tpcredits add {pseudo} 5")
+    os.system(f"mcsend advancement grant {pseudo} only palg_adv:success/vote0")
+    if votesnb >= 7:
+        os.system(f"mcsend advancement grant {pseudo} only palg_adv:success/vote1")
+    return "OK"
+
 def getInfos(pseudo):
     uuid = getUUID(pseudo)
     if uuid is None:
@@ -105,7 +112,7 @@ def getIp(pseudo):
     uuid = getUUID(pseudo)
     if uuid is None:
         return "BAD_PSEUDO"
-    return pop("grep ipAddress {}/plugins/Essentials/userdata/{}.yml".format(PATHS[0], uuid).split(" "), stdout=PIPE, stderr=PIPE).communicate()[0].decode().replace("ipAddress: ", "").replace("\n", "")
+    return pop("grep ip-address {}/plugins/Essentials/userdata/{}.yml".format(PATHS[0], uuid).split(" "), stdout=PIPE, stderr=PIPE).communicate()[0].decode().replace("ip-address: ", "").replace("\n", "")
 
 
 def getLastLogout(uuid):

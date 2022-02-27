@@ -5,7 +5,11 @@ import re,json
 p = Popen("mclogs all UUID of player \\S+? is".split(" "),stdout=PIPE)
 logs = p.communicate()[0].decode().replace("\x1b[0m","").replace("\x1b[32m","").replace("\x1b[01;31m\x1b[K","").replace("\x1b[m\x1b[K","")
 logs = re.sub(r"\n*--------BEGIN \S+.log---------\n--------END \S+.log---------\n*","",logs).split("-----------------BEGIN ")
-dic = {}
+try:
+	dic = json.loads(open("firstjoins.json","r").read())
+except FileNotFoundError:
+	dic = {}
+
 for l in logs:
 	date = re.search(r"--------END ([0-9]+-[0-9]+-[0-9]+)-[0-9]+\.log(?:---------)?",l).groups()[0]
 	for uuid in re.findall(r"UUID of player \S+? is (\S+?)\n",l):

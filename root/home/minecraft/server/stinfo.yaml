@@ -1,5 +1,5 @@
 javapath: /usr/lib/jvm/jdk-17/bin/java
-version: paper-1.18.1-215.jar
+version: paper-1.18.1-216.jar
 ram:
   - 500M
   - 2176M

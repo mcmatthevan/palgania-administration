@@ -3,6 +3,7 @@ from subprocess import PIPE
 import re
 import csv
 import json
+import yaml
 import os
 import requests
 import time
@@ -11,6 +12,14 @@ L_PATH = os.path.abspath(os.path.dirname(__file__) + "/..")
 PATHS = ("/home/minecraft/server",
          "/home/minecraft/atestpl")
 rshellpath = "/home/minecraft/rshell/rshell.py"
+botdir = "/home/minecraft/bot"
+
+def getDiscord(uuid):
+    dic = yaml.safe_load(open(botdir+"/usermap.yaml","r").read())
+    for item in dic:
+        if dic[item] == uuid.strip():
+            return item
+    return None
 
 def suspension(player,temp):
     player = player.lower()
@@ -46,12 +55,16 @@ def vote_award(pseudo,votesnb):
         os.system(f"mcsend advancement grant {pseudo} only palg_adv:success/vote1")
     return "OK"
 
-def getInfos(pseudo):
-    uuid = getUUID(pseudo)
+def getInfos(pseudo,is_uuid=False):
+    if is_uuid:
+        uuid = pseudo
+    else:
+        uuid = getUUID(pseudo)
     if uuid is None:
         return {"uuid": None}
     dic = {
         "uuid": uuid,
+        "discord": getDiscord(uuid),
         "lastLogout": time.strftime("%Y-%m-%d", time.localtime(getLastLogout(uuid)//1000))
     }
     import simplejson
@@ -60,6 +73,8 @@ def getInfos(pseudo):
             "https://sessionserver.mojang.com/session/minecraft/profile/{}".format(uuid)).json()["name"]
     except simplejson.errors.JSONDecodeError:
         dic["pseudo"] = pseudo
+    if is_uuid:
+        pseudo = dic['pseudo']
     banned = open("{}/banned-players.json".format(PATHS[0]), "r").read()
     if re.search(r"(?i)\"name\":\s*\"{}\"".format(pseudo), banned):
         banned = json.loads(banned)
